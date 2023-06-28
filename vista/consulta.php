@@ -1,5 +1,5 @@
 <<?php
-  include_once '../modelo/conexion.php'
+  include_once '../modelo/conexionfiltrar.php'
 
   ?> <!DOCTYPE html>
   <html lang="en">
@@ -31,14 +31,18 @@
               <a class="nav-link active text-white" aria-current="page" href="../index.php">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="ingreso.php">Registro</a>
+              <a class="nav-link text-white" href="consulta.php">Consulta</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="listado.php">Listado</a>
+     <a class="nav-link text-white" href="ingresoDueño.php">Registro dueño mascota</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-white" href="consulta.php">Consulta</a>
+      <a class="nav-link text-white" href="ingresoMascota.php">Registro mascota</a>  
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white" href="listado.php">Listado</a> 
             </li>
           </ul>
           <form class="d-flex" role="search">
@@ -97,6 +101,7 @@
                         <td><center><b> telefono </b></center></td>
                         <td><center><b> direccion </b></center></td>
                         <td><center><b> correo </b></center></td>
+            
                         </tr>
                         <tr>
                         <td><center>".$consulta['nombre']."</center></td>
