@@ -1,9 +1,10 @@
 <?php
   include_once '../modelo/conexionfiltrar.php';
-  $objeto= new Conexion();
+  $objeto = new Conexion();
   $conexion = $objeto->Conectar();
 
 
+$conexion->query("USE veterinaria");
 $consulta = "SELECT * FROM dueño_mascota";
   $resultado = $conexion->prepare($consulta);
   $resultado->execute();
@@ -78,7 +79,7 @@ $consulta = "SELECT * FROM dueño_mascota";
             <th scope="col">Item</th>
             <th scope="col">Nombres</th>
             <th scope="col">Apellidos</th>
-            <th scope="col">Tipo documento</th>
+            <th scope="col">Tipo de documento</th>
             <th scope="col">Numero documento</th>
             <th scope="col">Edad</th>
             <th scope="col">Telefono</th>
@@ -94,7 +95,7 @@ $consulta = "SELECT * FROM dueño_mascota";
         foreach($dueñoM as $filtro){
             ?>
             <tr>
-                <td><?php echo $filtro['id_dueño ']?></td>
+                <td><?php echo $filtro['id_dueño']?></td>
                 <td><?php echo $filtro['nombre']?></td>
                 <td><?php echo $filtro['apellido']?></td>
                 <td><?php echo $filtro['tipo_documento']?></td> 
@@ -106,12 +107,7 @@ $consulta = "SELECT * FROM dueño_mascota";
 
                 <td><button type="button" class="btn btn-success editbtn"   data-bs-toggle="modal" data-bs-target="#editar"><i class="fa-solid fa-file-pen"></i></button></td>
 
-                <td><button type="button" class="btn btn-success deletebtn"  data-bs-toggle="modal"  data-bs-target="#eliminar"><i class="fa-solid fa-solid fa-trash-can"></i></button></td>
-
-
-                
-                
-        
+                <td><button type="button" class="btn btn-danger deletebtn"  data-bs-toggle="modal"  data-bs-target="#eliminar"><i class="fa-solid fa-solid fa-trash-can"></i></button></td>     
        </tr>
 <?php
  }
@@ -119,9 +115,74 @@ $consulta = "SELECT * FROM dueño_mascota";
         </tbody>
     </table>
     </center>
-
-
-
-
-
     </div>
+
+
+<!-- Modal  de editar-->
+<div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="width: 80rem;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Actualización de datos</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post">
+          <input type="hidden" name="id" id="update_id">
+
+          <div class="container text-center">
+        <div class="row">
+          <div class="col -6">
+
+          <div class="form-group">
+            <label for="">Nombres</label>
+            <input type="text" name="nombre" id="nombre" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="">Apellidos</label>
+            <input type="text" name="apellido" id="apellido" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="">Tipo de documento</label>
+            <select name="tipodoc" id="tipodoc" class="form-control">
+                        <option>---Seleccione---</option>
+                        <option>---Cedula de Ciudadania---</option>
+                        <option>---Cedula de Extranjeria---</option>
+                      </select>
+                    </div>
+          
+            <div class="form-group">
+            <label for="">Numero de Documento</label>
+            <input type="number" name="documento" id="documento" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="">Edad</label>
+            <input type="number" name="edad" id="edad" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="">Telefono</label>
+            <input type="number" name="telefono" id="telefono" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for=""> Dirección </label>
+            <input type="direccion" name="direccion" id="direccion" class="form-control">
+          </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+      <button type="submit" class="btn btn-success">Actualizar</button>
+    </div>
+          </div>
+          </div>
+        </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -59,15 +59,13 @@
     <div class="container text-center">
       <div class="row">
         <div class="col">
-
           <form action="" method="post">
-            <div class="card" style="width: 30rem;">
+            <div class="card position-relative mx-auto mb-4" style="width: 30rem;">
               <div class="card-header bg-Success  text-white">
                 Formulario de registro del Dueño de la mascota
               </div>
               <div class="container text-center">
                 <div class="row">
-                  
                     <div class='mb-3 col-6'>
                       <label class="form-label" for="Nombre">Nombre del Dueño</label>
                       <input type="text" name="Nombre" placeholder="Nombres" class="form-control">
@@ -161,8 +159,9 @@
             ?>
           </form>
         </div>
-
   </body>
+ 
+  <br>
   <!-- Footer -->
   <footer class="text-center text-lg-start bg-info text-muted">
     <!-- Section: Social media -->
