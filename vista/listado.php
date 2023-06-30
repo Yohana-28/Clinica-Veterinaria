@@ -19,11 +19,19 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
   <title>Formulario Ingreso </title>
   <link rel="shortcut icon" href="../img/logo.png">
 
+<!--- Estilo datables librery----->
+<link rel="stylesheet"  type="text/css" href="datatables/datatables.min.css">
+
+<link rel="stylesheet"  type="text/css" href="datatables/css/dataTables.bootstrap4.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-apha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  
   <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 
   <!---- Alertas con estilo ---->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -32,6 +40,8 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
   <!---- Iconos de Botones  ---->
   <script src="https://kit.fontawesome.com/5d93fb46f2.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
+
+
 
 </head>
 
@@ -74,8 +84,8 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
     <h1 class="text-center text-dark">Listado de registrados</h1><br>
     <br>
     <center>
-      <table id="tablaUsuario" class="table-striped table-sucess" style="width: 100%">
-        <thead></thead>
+      <table id="tablaUsuario" class="table-striped table-success" style="width: 100%">
+        <thead>
         <tr>
           <th scope="col">Item</th>
           <th scope="col">Nombres</th>
@@ -85,9 +95,7 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
           <th scope="col">Edad</th>
           <th scope="col">Telefono</th>
           <th scope="col">Direccion</th>
-          <th scope="col">
-            <center> Correo </center>
-          </th>
+          <th scope="col">Correo</th>
         </tr>
         </thead>
         <tbody>
@@ -232,6 +240,15 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
   <script>
+
+$(document).ready(function(){
+  $('#tablaUsuario').DataTable();
+
+
+});
+</script>
+
+  <script>
     // Captura el evento del botón "Editar" de cada fila
     var editButtons = document.getElementsByClassName("botonEditarDueño");
     Array.from(editButtons).forEach(function(button) {
@@ -254,3 +271,150 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
       });
     });
   </script>
+
+
+
+
+<br>
+  <!-- Footer -->
+  <footer class="text-center text-lg-start bg-info text-muted">
+    <!-- Section: Social media -->
+    <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+      <!-- Left -->
+      <div class="me-5 d-none d-lg-block">
+        <span>Get connected with us on social networks:</span>
+      </div>
+      <!-- Left -->
+
+      <!-- Right -->
+      <div>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-facebook-f"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-google"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-linkedin"></i>
+        </a>
+        <a href="" class="me-4 text-reset">
+          <i class="fab fa-github"></i>
+        </a>
+      </div>
+      <!-- Right -->
+    </section>
+    <!-- Section: Social media -->
+
+    <!-- Section: Links  -->
+    <section class="">
+      <div class="container text-center text-md-start mt-5">
+        <!-- Grid row -->
+        <div class="row mt-3">
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <!-- Content -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              <i class="fas fa-gem me-3"></i>Company name
+            </h6>
+            <p>
+              Here you can use rows and columns to organize your footer content. Lorem ipsum
+              dolor sit amet, consectetur adipisicing elit.
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Products
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">Angular</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">React</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Vue</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Laravel</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">
+              Useful links
+            </h6>
+            <p>
+              <a href="#!" class="text-reset">Pricing</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Settings</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Orders</a>
+            </p>
+            <p>
+              <a href="#!" class="text-reset">Help</a>
+            </p>
+          </div>
+          <!-- Grid column -->
+
+          <!-- Grid column -->
+          <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+            <!-- Links -->
+            <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+            <p><i class="fas fa-home me-3"></i> New York, NY 10012, US</p>
+            <p>
+              <i class="fas fa-envelope me-3"></i>
+              info@example.com
+            </p>
+            <p><i class="fas fa-phone me-3"></i> + 01 234 567 88</p>
+            <p><i class="fas fa-print me-3"></i> + 01 234 567 89</p>
+          </div>
+          <!-- Grid column -->
+        </div>
+        <!-- Grid row -->
+      </div>
+    </section>
+    <!-- Section: Links  -->
+
+    <!-- Copyright -->
+    <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+      © 2021 Copyright:
+      <a class="text-reset fw-bold" href="https://mdbootstrap.com/">MDBootstrap.com</a>
+    </div>
+    <!-- Copyright -->
+  </footer>
+
+  <!-- Popper Bootstrap  -->
+  <script type="text/javascript" src="../jquery/jquery-3.3.1.min.js"></script>
+
+
+   <!-- Libreria js datable  -->
+
+   <script type="text/javascript" src="../datatables/datatables.min.js"></script>
+
+   <!-- js datable  -->
+   <script  src="../datatables/Buttons-2.3.3/js/dataTables.buttons.min.js"></script>
+   <script  src="../datatables/JSZip-2.5.0/jszip.min.js"></script>
+   <script  src="../datatables/pdfmake-0.1.36/pdfmake.min.js"></script>
+   <script  src="../datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+   <script  src="../datatables/Buttons-2.3.3/js/buttons.html5.min.js"></script>
+
+   <script type="text/javascript" src="../js/main.js"></script>
+
+
+
+  </html>
