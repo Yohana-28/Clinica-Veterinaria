@@ -1,7 +1,9 @@
 <<?php
   include_once '../modelo/conexionfiltrar.php'
 
-  ?> <!DOCTYPE html>
+  ?> 
+  
+  <!DOCTYPE html>
   <html lang="en">
 
   <head>
@@ -10,14 +12,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario Ingreso </title>
     <link rel="shortcut icon" href="../img/logo.png">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
     <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+	
+		<script src="https://kit.fontawesome.com/dcb1bbced2.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 
   <body>
@@ -44,12 +49,18 @@
             </li>
 
             <li class="nav-item">
+      
+            <a class="nav-link text-white" href="historia_clinica.php">Historia Clinica</a>  
+            </li>
+
+            <li class="nav-item">
               <a class="nav-link text-white" href="listado.php">Listado</a>
             </li>
           </ul>
           <form class="d-flex" role="search">
             <input class="form-control me-2" type="Buscar" placeholder="Buscar" aria-label="Search">
-            <button class="btn btn-outline-dark" type="submit">Buscar</button>
+            <button class="btn btn-outline-dark text-white" type="submit">Buscar</button>&nbsp
+        <a href="../logout.php" class="btn btn-dark text-white" title="Cerrar Seción"><i class="fas fa-sign-out-alt"></i></a>	
           </form>
         </div>
       </div>
@@ -89,8 +100,8 @@
 
         
                     <div class='mb-3 col-6'>
-                      <label>Edad</label>
-                      <input type="number" name="Edad" placeholder="Edad del dueño" class="form-control">
+                      <label>Fecha de Nacimiento</label>
+                      <input type="date" name="Edad" placeholder="Fecha del dueño" class="form-control">
                     </div>
                     <div class='mb-3 col-6'>
                       <label>Telefono </label>
@@ -104,8 +115,9 @@
                       <label>Email</label>
                       <input type="email" name="email" placeholder="Email " class="form-control">
                     </div>
-                  
 
+                      <br>
+                  
                   <div>
                     <input type="submit" name="btn_guardar" class="btn btn-dark" value="Guardar">
                   </div>
@@ -137,15 +149,13 @@
 
                   echo "<script> Swal.fire('Todos los campos son obligatorios')</script> ";
                 } else {
-                  $query = mysqli_query($conectar, "INSERT INTO dueño_mascota( nombre, 	apellido, tipo_documento,numero_documento,
-        edad, telefono, direccion, correo) values ('$nombredu','$apellido','$tipodoc', '$ndocumento', '$edad','$tel', '$direccion','$email' )"); {
+                  $query = mysqli_query($conectar, "INSERT INTO dueño_mascota( nombres, apellidos, tipo_documento,numero_documento, fecha_nacimiento, telefono, direccion, correo) values ('$nombredu','$apellido','$tipodoc', '$ndocumento', '$edad','$tel', '$direccion','$email' )"); {
                     echo "<script> Swal.fire('Datos registrados exitosamente')</script> ";
                   }
                 }
               }
             } catch (Exception $e) {
-            
-             
+          
               if ($e->getCode() == 1062 ) 
               { echo "<script> Swal.fire('El usuario ya existe') </script>";}
 
@@ -159,11 +169,13 @@
             ?>
           </form>
         </div>
+      </div>
+    </div>
   </body>
  
-  <br>
   <!-- Footer -->
-  <footer class="text-center text-lg-start bg-info text-muted">
+ 
+<footer class="text-center text-lg-start text-muted" style="background-color: #D6EAF8 !important;">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
       <!-- Left -->
@@ -283,7 +295,11 @@
     </div>
     <!-- Copyright -->
   </footer>
+    
 
 
 
   </html>
+
+
+  

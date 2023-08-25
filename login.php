@@ -9,35 +9,46 @@ if (isset($_POST['submit'])) {
     $sql = "SELECT * FROM usuario WHERE nombre_usuario = '$nombre_usuario' AND contraseña = '$contraseña'";
     $result = $conn->query($sql);
 
-
     if ($result->num_rows > 0) {
         // Usuario válido, redirigir al perfil correspondiente
         $row = $result->fetch_assoc();
-    
-        
-            $_SESSION['id_usuario'] = $row['id_usuario'];
-            $_SESSION['correo'] = $row['correo'];
-            $_SESSION['datos_usuario'] = $row['datos_usuario'];
-            $_SESSION['nombre_usuario'] = $row['nombre_usuario'];
-            $_SESSION['perfil'] = $row['perfil'];
-    
-            $userType = $row['perfil'];
-    
-            if ($userType == 'secretaria') {
-                header("Location:vista/ingresoDueño.php");
-            } elseif ($userType == 'medico') {
-                header("Location:vista/index.php");
-            }elseif ($userType == 'Administrador') {
-            header("Location:vista/listado.php");
+
+        $_SESSION['id_usuario'] = $row['id_usuario'];
+        $_SESSION['correo'] = $row['correo'];
+        $_SESSION['datos_usuario'] = $row['datos_usuario'];
+        $_SESSION['nombre_usuario'] = $row['nombre_usuario'];
+        $_SESSION['perfil'] = $row['perfil'];
+
+        $userType = $row['perfil'];
+
+        if ($userType == 'secretaria') {
+            header("Location: vista/index.php");
+        } elseif ($userType == 'medico') {
+            header("Location: vista/historia_clinica.php");
+        } elseif ($userType == 'Administrador') {
+            header("Location: vista/listado.php");
         }
     } else {
-        // Credenciales inválidas, redirigir al formulario de inicio de sesión
-        $error = "Nombre de usuario o contraseña incorrectos.";
-        header("Location: login.php");
+        // Usuario inválido, configurar mensaje de error
+        $_SESSION['login_error'] = 'Usuario o contraseña incorrectos';
     }
 }
 
+// Aquí no debe haber una nueva llamada a session_start()
+
+if (isset($_SESSION['login_error'])) {
+    echo '<script>';
+    echo 'Swal.fire({';
+    echo '    icon: "error",';
+    echo '    title: "Error",';
+    echo '    text: "' . $_SESSION['login_error'] . '"';
+    echo '});';
+    echo '</script>';
+    unset($_SESSION['login_error']);
+}
+
 ?>
+
 <html>
 <head>
 <meta charset="UTF-8">
@@ -46,6 +57,8 @@ if (isset($_POST['submit'])) {
     <title>login</title>
     <link rel="stylesheet" href="css/login.css">
 	<link rel="shortcut icon" href="">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.18/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="login-box"> 

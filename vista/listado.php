@@ -3,45 +3,54 @@ include_once '../modelo/conexionfiltrar.php';
 $objeto = new Conexion();
 $conexion = $objeto->Conectar();
 
-
 $conexion->query("USE veterinaria");
-$consulta = "SELECT * FROM dueño_mascota";
+$consulta = "SELECT dueño_mascota.id_dueño,dueño_mascota.nombres,dueño_mascota.apellidos,dueño_mascota.tipo_documento,dueño_mascota.numero_documento,dueño_mascota.fecha_nacimiento AS edad,dueño_mascota.telefono,dueño_mascota.direccion,dueño_mascota.correo, mascota_paciente.id_mascota, mascota_paciente.nombre_mascota,mascota_paciente.raza, mascota_paciente.tipo_mascota, mascota_paciente.sexo, mascota_paciente.fecha_nacimiento, mascota_paciente.fk_id_dueño 
+             FROM dueño_mascota AS dueño_mascota
+             LEFT JOIN mascota_paciente AS mascota_paciente ON dueño_mascota.id_dueño = mascota_paciente.fk_id_dueño";
+
+
+
 $resultado = $conexion->prepare($consulta);
 $resultado->execute();
 $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
 
+<?php
+session_start();
+
+if (!isset($_SESSION['id_usuario'])) {
+  header("Location: ../login.php");
+}
+
+$perfil = $_SESSION['perfil'];
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
   <title>Formulario Ingreso </title>
   <link rel="shortcut icon" href="../img/logo.png">
 
-<!--- Estilo datables librery----->
-<link rel="stylesheet"  type="text/css" href="datatables/datatables.min.css">
-
-<link rel="stylesheet"  type="text/css" href="datatables/css/dataTables.bootstrap4.css">
-
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-apha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-  
-  <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
-
-
-  <!---- Alertas con estilo ---->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-
-  <!---- Iconos de Botones  ---->
-  <script src="https://kit.fontawesome.com/5d93fb46f2.js" crossorigin="anonymous"></script>
+   <!-- Bootstrap CSS -->
+   <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- CSS personalizado --> 
+    <link rel="stylesheet" href="main.css">
+  <!---datables CSS básico--->
+  <link rel="stylesheet" type="text/css" href="../datatables/datatables.min.css">
+  <link rel="stylesheet" type="text/css" href="../datatables/css/dataTables.bootstrap4.min.css">
+   <!--datables estilo bootstrap 4 CSS-->  
+   <link rel="stylesheet"  type="text/css" href="datatables/DataTables-1.10.18/css/dataTables.bootstrap4.min.css">
+ <link rel="stylesheet" type="text/css" href="datatables/DataTables-1.13.6/css/dataTables.bootstrap4.min.css">
+   <!---Bootstrap iconos--->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+ <!---Bootstrap Estilo de la tabla--->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  <!---- Iconos de los botones bonito --->
+  <script src="https://kit.fontawesome.com/dcb1bbced2.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
-
-
+<!--font awesome con CDN-->  
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">  
 
 </head>
 
@@ -60,7 +69,7 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
           <li class="nav-item">
             <a class="nav-link text-white" href="consulta.php">Consulta</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item dropdown">
             <a class="nav-link text-white" href="ingresoDueño.php">Registro dueño mascota</a>
           </li>
 
@@ -69,34 +78,48 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
           </li>
 
           <li class="nav-item">
+            <a class="nav-link text-white" href="historia_clinica.php">Historia Clinica</a>
+          </li>
+
+          <li class="nav-item">
             <a class="nav-link text-white" href="listado.php">Listado</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="Buscar" placeholder="Buscar" aria-label="Search">
-          <button class="btn btn-outline-dark" type="submit">Buscar</button>
+          <button class="btn btn-outline-dark text-white" type="submit">Buscar</button>&nbsp
+          <a href="../logout.php" class="btn btn-dark text-white" title="Cerrar Seción"><i class="fas fa-sign-out-alt"></i></a>
         </form>
       </div>
     </div>
   </nav>
   <br><br>
-  <div class="container">
+  <div style="margin:50px">
     <h1 class="text-center text-dark">Listado de registrados</h1><br>
     <br>
-    <center>
-      <table id="tablaUsuario" class="table-striped table-success" style="width: 100%">
+    <div class="table-responsive">
+    <table id="tablaUsuario" class="table table-striped" style="width: 100%">
         <thead>
-        <tr>
-          <th scope="col">Item</th>
-          <th scope="col">Nombres</th>
-          <th scope="col">Apellidos</th>
-          <th scope="col">Tipo de documento</th>
-          <th scope="col">Numero documento</th>
-          <th scope="col">Edad</th>
-          <th scope="col">Telefono</th>
-          <th scope="col">Direccion</th>
-          <th scope="col">Correo</th>
-        </tr>
+          <tr>
+          <th scope="col" style="display: none;"></th>
+            <th scope="col"><small>Nombres</small></th>
+            <th scope="col"><small>Apellidos</small></th>
+            <th scope="col" style="display: none;"></th>
+            <th scope="col"><small>Numero documento</small></th>
+            <th scope="col" style="display: none;"></th>
+            <th scope="col"><small>Telefono</small></th>
+            <th scope="col"><small>Direccion</small></th>
+            <th scope="col" style="display: none;"></th>
+            <th scope="col" style="display: none;"></th>
+            <th scope="col"><small>Nombre mascota</small></th>
+            <th scope="col"><small>Raza</small></th>
+            <th scope="col"><small>Tipo mascota</small></th>
+            <th scope="col"><small>Sexo</small></th>
+            <th scope="col"><small>Fecha de nacimiento</small></th>
+            <th scope="col" style="display: none;"></th>
+            <th scope="col"><small>Editar</small></th>
+            <th scope="col"><small>Eliminar</small></th>
+          </tr>
         </thead>
         <tbody>
 
@@ -104,17 +127,27 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
           <?php
           foreach ($dueñoM as $filtro) {
+            // Obtén la fecha de nacimiento y conviértela en un objeto DateTime
+
           ?>
             <tr>
-              <td><?php echo $filtro['id_dueño'] ?></td>
-              <td><?php echo $filtro['nombre'] ?></td>
-              <td><?php echo $filtro['apellido'] ?></td>
-              <td><?php echo $filtro['tipo_documento'] ?></td>
-              <td><?php echo $filtro['numero_documento'] ?></td>
-              <td><?php echo $filtro['edad'] ?></td>
-              <td><?php echo $filtro['telefono'] ?></td>
-              <td><?php echo $filtro['direccion'] ?></td>
-              <td><?php echo $filtro['correo'] ?></td>
+            <td style="display: none;"><?php echo $filtro['id_dueño'] ?></td>
+              <td><small><?php echo $filtro['nombres'] ?></small></td>
+              <td><small><?php echo $filtro['apellidos'] ?></small></td>
+              <td style="display: none;"><?php echo $filtro['tipo_documento'] ?></td>
+              <td><small><?php echo $filtro['numero_documento'] ?></small></td>
+              <td style="display: none;"><?php echo $filtro['edad'] ?></td>
+              <td><small><?php echo $filtro['telefono'] ?></small></td>
+              <td><small><?php echo $filtro['direccion'] ?></small></td>
+              <td style="display: none;"><?php echo $filtro['correo'] ?></td>
+              <td style="display: none;"><?php echo $filtro['id_mascota'] ?></td>
+              <td><small><?php echo $filtro['nombre_mascota'] ?></small></td>
+              <td><small><?php echo $filtro['raza'] ?></small></td>
+              <td><small><?php echo $filtro['tipo_mascota'] ?></small></td>
+              <td><small><?php echo $filtro['sexo'] ?></small></td>
+              <td><small><?php echo $filtro['fecha_nacimiento'] ?></small></td>
+              <td style="display: none;"><?php echo $filtro['fk_id_dueño'] ?></td>
+
 
               <td><button type="button" class="btn btn-success editbtn botonEditarDueño" data-bs-toggle="modal" data-bs-target="#editar"><i class="fa-solid fa-file-pen"></i></button></td>
 
@@ -126,12 +159,13 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
           ?>
         </tbody>
       </table>
-    </center>
+    </div>
+     
   </div>
 
 
   <!-- Modal  de editar-->
-  <div class="modal fade" id="editar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="editar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width: 80rem;">
       <div class="modal-content">
         <div class="modal-header">
@@ -148,31 +182,31 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
 
                   <div class="form-group">
                     <label for="">Nombres</label>
-                    <input type="text" name="nombre" id="nombre" class="form-control">
+                    <input type="text" name="nombres" id="nombres" class="form-control">
                   </div>
 
                   <div class="form-group">
                     <label for="">Apellidos</label>
-                    <input type="text" name="apellido" id="apellido" class="form-control">
+                    <input type="text" name="apellidos" id="apellidos" class="form-control">
                   </div>
 
                   <div class="form-group">
                     <label for="">Tipo de documento</label>
-                    <select name="tipo_documento" id="tipodocu" class="form-control">
+                    <select name="tipo_documento" id="tipo_documento" class="form-control">
                       <option>---Seleccione---</option>
                       <option>---Cedula de Ciudadania---</option>
                       <option>---Cedula de Extranjeria---</option>
                     </select>
                   </div>
 
-                  <div class="form-group">
+                  <div class="f  orm-group">
                     <label for="">Numero de Documento</label>
-                    <input type="number" name="numero_documento" id="ndocumento" class="form-control">
+                    <input type="number" name="ndocumento" id="ndocumento" class="form-control">
                   </div>
 
                   <div class="form-group">
                     <label for="">Edad</label>
-                    <input type="number" name="edad" id="edad" class="form-control">
+                    <input type="date" name="edad" id="edad" class="form-control">
                   </div>
 
                   <div class="form-group">
@@ -189,6 +223,28 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
                     <label for=""> Correo </label>
                     <input type="email" name="correo" id="email" class="form-control">
                   </div>
+                  <input type="text" name="id_mascota" id="id_mascota">
+                  <div class="form-group">
+                    <label for=""> Nombre mascota </label>
+                    <input type="text" name="nombre_mascota" id="nombre_mascota" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for="">Raza</label>
+                    <input type="text" name="raza" id="raza" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for=""> Tipo de mascota</label>
+                    <input type="text" name="tipo_mascota" id="tipo_mascota" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for=""> Sexo </label>
+                    <input type="text" name="sexo" id="sexo" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <label for=""> Fecha de nacimiento </label>
+                    <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" class="form-control">
+                  </div>
+                  <input type="hidden" name="fk_id_dueño" id="fk_id_dueño">
 
                   <div class="modal-footer">
                     <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
@@ -204,7 +260,7 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
   </div>
   </div>
 
-  
+
 
   <!-- Modal  de eliminar-->
   <div class="modal fade" id="eliminar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -239,14 +295,7 @@ $dueñoM = $resultado->fetchAll(PDO::FETCH_ASSOC);
   </div>
   </div>
 
-  <script>
 
-$(document).ready(function(){
-  $('#tablaUsuario').DataTable();
-
-
-});
-</script>
 
   <script>
     // Captura el evento del botón "Editar" de cada fila
@@ -259,7 +308,7 @@ $(document).ready(function(){
         document.getElementById("update_id").value = idDueño;
       });
     });
-    
+
     // Captura el evento del botón "Elimar" de cada fila
     var deleteButtons = document.getElementsByClassName("botonEliminarDueño");
     Array.from(deleteButtons).forEach(function(button) {
@@ -272,12 +321,17 @@ $(document).ready(function(){
     });
   </script>
 
+  <script>
+    $(document).ready(function() {
+      $('#tablaUsuario').DataTable();
+
+    });
+  </script>
 
 
-
-<br>
+  <br>
   <!-- Footer -->
-  <footer class="text-center text-lg-start bg-info text-muted">
+  <footer class="text-center text-lg-start text-muted" style="background-color: #D6EAF8 !important;">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
       <!-- Left -->
@@ -400,21 +454,94 @@ $(document).ready(function(){
 
   <!-- Popper Bootstrap  -->
   <script type="text/javascript" src="../jquery/jquery-3.3.1.min.js"></script>
+  <script src="popper/popper.min.js"></script>
+  <script src="bootstrap/js/bootstrap.min.js"></script>
 
 
-   <!-- Libreria js datable  -->
-
-   <script type="text/javascript" src="../datatables/datatables.min.js"></script>
-
-   <!-- js datable  -->
-   <script  src="../datatables/Buttons-2.3.3/js/dataTables.buttons.min.js"></script>
-   <script  src="../datatables/JSZip-2.5.0/jszip.min.js"></script>
-   <script  src="../datatables/pdfmake-0.1.36/pdfmake.min.js"></script>
-   <script  src="../datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
-   <script  src="../datatables/Buttons-2.3.3/js/buttons.html5.min.js"></script>
-
-   <script type="text/javascript" src="../js/main.js"></script>
+ <!-- para usar botones en datatables JS -->  
+ <script src="datatables/Buttons-1.5.6/js/dataTables.buttons.min.js"></script>  
+    <script src="datatables/JSZip-2.5.0/jszip.min.js"></script>    
+    <script src="datatables/pdfmake-0.1.36/pdfmake.min.js"></script>    
+    <script src="datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+    <script src="datatables/Buttons-1.5.6/js/buttons.html5.min.js"></script>
 
 
+  <!-- Libreria js datable -->
 
-  </html>
+  <script type="text/javascript" src="../datatables/datatables.min.js"></script>
+
+  <!--- js datable --->
+  <script src="../datatables/Buttons-2.3.3/js/dataTables.buttons.min.js"></script>
+  <script src="../datatables/JSZip-2.5.0/jszip.min.js"></script>
+  <script src="../datatables/pdfmake-0.1.36/pdfmake.min.js"></script>
+  <script src="../datatables/pdfmake-0.1.36/vfs_fonts.js"></script>
+  <script src="../datatables/Buttons-2.3.3/js/buttons.html5.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+
+  <script type="text/javascript" src="../js/main.js"></script>
+
+  <!---Script Modal Editar--->
+  <script>
+
+
+
+    $('.editbtn').on('click', function() {
+      $tr = $(this).closest('tr');
+      var datos = $tr.children("td").map(function() {
+        return $(this).text();
+      });
+
+      // Asigna los valores capturados a los campos del formulario de edición
+      $('#update_id').val(datos[0]);
+      $('#nombres').val(datos[1]);
+      $('#apellidos').val(datos[2]);
+      $('#tipo_documento').val(datos[3]);
+      $('#ndocumento').val(datos[4]);
+      $('#edad').val(datos[5]);
+      $('#telefono').val(datos[6]);
+      $('#direccion').val(datos[7]);
+      $('#email').val(datos[8]);
+      $('#id_mascota').val(datos[9]);
+      $('#nombre_mascota').val(datos[10]);
+      $('#raza').val(datos[11]);
+      $('#tipo_mascota').val(datos[12]);
+      $('#sexo').val(datos[13]);
+      $('#fecha_nacimiento').val(datos[14]);
+      $('#fk_id_dueño').val(datos[15]);
+
+
+      // Realiza la petición AJAX para enviar los datos al archivo editar.php
+      $.ajax({
+        url: "../controlador/editar.php",
+        method: "POST",
+        data: {
+          id_dueño: datos[0],
+          nombres: datos[1],
+          apellidos: datos[2],
+          tipo_documento: datos[3],
+          numero_documento: datos[4],
+          edad: datos[5],
+          telefono: datos[6],
+          direccion: datos[7],
+          correo: datos[8],
+          id_mascota: datos[9],
+          nombre_mascota: datos[10],
+          raza: datos[11],
+          tipo_mascota: datos[12],
+          sexo: datos[13],
+          fecha_nacimiento: datos[14],
+          fk_id_dueño: datos[15]
+        },
+        success: function(response) {
+          // Manejar la respuesta del servidor si es necesario
+          console.log(response);
+        },
+        error: function(xhr, status, error) {
+          console.error(error);
+        }
+      });
+    });
+  </script>
+
+</html>

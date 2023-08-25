@@ -1,51 +1,119 @@
+<?php
+  include_once '../modelo/conexion_historia.php'
+  ?> 
+<?php
+session_start();
+
+if (!isset($_SESSION['id_usuario'])) {
+    header("Location: ../login.php");
+}
+
+$perfil = $_SESSION['perfil'];
+?>
+ 
  <!DOCTYPE html>
 <html>
 <head>
   <title>Historia Clínica Veterinaria</title>
-  <!-- Agregar los enlaces CSS de Bootstrap -->
+  <link rel="shortcut icon" href="../img/logo.png">
+
+<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+	
+		<script src="https://kit.fontawesome.com/dcb1bbced2.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <div class="container">
-    <h2>Historia Clínica Veterinaria</h2>
+<nav class="navbar navbar-expand-lg bg-info"> 
+  <div class="container-fluid">
+   <img src="../img/logo.png" width="5%">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active  text-white" aria-current="page" href="index.php">Inicio</a>
+        </li>
+        <li class="nav-item">
+              <a class="nav-link text-white" href="consulta.php">Consulta</a>
+            </li>
+            <li class="nav-item">
+     <a class="nav-link text-white" href="ingresoDueño.php">Registro dueño mascota</a>
+            </li>
+
+            <li class="nav-item">
+      <a class="nav-link text-white" href="ingresoMascota.php">Registro mascota</a>  
+            </li>
+
+            <li class="nav-item">
+      <a class="nav-link text-white" href="historia_clinica.php">Historia Clinica</a>  
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link text-white" href="listado.php">Listado</a> 
+            </li>
+      
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
+        <button class="btn btn-outline-dark text-white" type="submit">Buscar</button>&nbsp
+        <a href="../logout.php" class="btn btn-dark text-white" title="Cerrar Seción"><i class="fas fa-sign-out-alt"></i></a>	
+		</form>	
+	  </div>
+  </div>
+</nav>
+<br>
+  <div class="container text-center">
+  <div class="row">
+    <div class="col">
+      <form action="" method="post">
+ <div class="card position-relative mx-auto mb-4" style="width: 40rem;">
+		<div class="card-header bg-secondary text-black">
+    <h2>Historia clínica veterinaria</h2>
+    <br>
     <form>
       <div class="mb-3">
         <h3>Datos del Propietario</h3>
         <label for="nombre" class="form-label">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" value="Juan Pérez" readonly class="form-control">
+        <input type="text" id="nombre" name="nombre"  class="form-control">
 
         <label for="direccion" class="form-label">Dirección:</label>
-        <input type="text" id="direccion" name="direccion" value="Calle Principal 123" readonly class="form-control">
+        <input type="text" id="direccion" name="direccion" class="form-control">
 
         <label for="telefono" class="form-label">Teléfono:</label>
-        <input type="tel" id="telefono" name="telefono" value="555-123456" readonly class="form-control">
+        <input type="tel" id="telefono" name="telefono" class="form-control">
 
         <label for="email" class="form-label">Correo Electrónico:</label>
-        <input type="email" id="email" name="email" value="correo@example.com" readonly class="form-control">
+        <input type="email" id="email" name="email"  class="form-control">
       </div>
 
       <div class="mb-3">
         <h3>Información del Paciente</h3>
         <label for="nombreAnimal" class="form-label">Nombre del Animal:</label>
-        <input type="text" id="nombreAnimal" name="nombreAnimal" value="Rocky" readonly class="form-control">
+        <input type="text" id="nombreAnimal" name="nombreAnimal"  class="form-control">
 
         <label for="especie" class="form-label">Especie:</label>
-        <input type="text" id="especie" name="especie" value="Perro" readonly class="form-control">
+        <input type="text" id="especie" name="especie"  class="form-control">
 
         <label for="raza" class="form-label">Raza:</label>
-        <input type="text" id="raza" name="raza" value="Labrador Retriever" readonly class="form-control">
+        <input type="text" id="raza" name="raza"  class="form-control">
 
         <label for="edad" class="form-label">Edad o Fecha de Nacimiento:</label>
-        <input type="text" id="edad" name="edad" value="3 años" readonly class="form-control">
+        <input type="text" id="edad" name="edad"  class="form-control">
 
         <label for="genero" class="form-label">Género:</label>
-        <select id="genero" name="genero" disabled class="form-select">
-          <option value="macho" selected>Macho</option>
-          <option value="hembra">Hembra</option>
-          <option value="otro">Otro</option>
+        <select id="genero" name="genero"  class="form-select">
+          <option>Macho</option>
+          <option>Hembra</option>
+          <option>Otro</option>
         </select>
 
         <label for="color" class="form-label">Color y Características Físicas:</label>
-        <textarea id="color" name="color" rows="3" readonly class="form-control">Pelaje negro, tamaño mediano</textarea>
+        <textarea id="color" name="color" rows="3"  class="form-control">Pelaje negro, tamaño mediano</textarea>
       </div>
 
       <div class="mb-3">
@@ -169,120 +237,3 @@
 </html>
 
 
-
-Crear una nueva base de datos
-CREATE DATABASE nombre_base_datos;
-
--- Usar la base de datos creada
-USE nombre_base_datos;
-
--- Crear una tabla para la historia clínica veterinaria
-CREATE TABLE historia_clinica (
-  id INT PRIMARY KEY AUTO_INCREMENT,
-  propietario_nombre VARCHAR(100) NOT NULL,
-  propietario_direccion VARCHAR(100) NOT NULL,
-  propietario_telefono VARCHAR(20) NOT NULL,
-  propietario_email VARCHAR(100),
-  animal_nombre VARCHAR(100) NOT NULL,
-  animal_especie VARCHAR(100) NOT NULL,
-  animal_raza VARCHAR(100) NOT NULL,
-  animal_edad VARCHAR(20) NOT NULL,
-  animal_genero VARCHAR(10) NOT NULL,
-  animal_color_caracteristicas TEXT NOT NULL,
-  historia_medica_vacunas TEXT,
-  historia_medica_enfermedades TEXT,
-  historia_medica_cirugias TEXT,
-  historia_medica_alergias TEXT,
-  historia_medica_medicamentos TEXT,
-  historia_medica_reproductivo TEXT,
-  historial_alimentacion_tipo_alimento VARCHAR(100) NOT NULL,
-  historial_alimentacion_marca_variedad_alimento VARCHAR(100) NOT NULL,
-  historial_alimentacion_horarios TEXT NOT NULL,
-  historial_alimentacion_cantidad_frecuencia TEXT NOT NULL,
-  comportamiento_general TEXT,
-  actividad_fisica TEXT,
-  contacto_animales_enfermedades TEXT,
-  viajes_cambios_entorno TEXT,
-  examen_fisico_peso VARCHAR(20) NOT NULL,
-  examen_fisico_temperatura VARCHAR(20) NOT NULL,
-  examen_fisico_frecuencia_cardiaca VARCHAR(20) NOT NULL,
-  examen_fisico_frecuencia_respiratoria VARCHAR(20) NOT NULL,
-  examen_fisico_estado_piel_pelaje_unas TEXT NOT NULL,
-  examen_fisico_evaluacion_sistemas TEXT NOT NULL,
-  diagnosticos_previos_examenes TEXT,
-  diagnosticos_previos_pruebas_diagnostico_imagen TEXT,
-  diagnosticos_previos_otros TEXT,
-  consulta_actual_motivo TEXT NOT NULL,
-  consulta_actual_sintomas TEXT NOT NULL,
-  consulta_actual_duracion VARCHAR(100) NOT NULL,
-  consulta_actual_cambios_comportamiento_salud TEXT NOT NULL,
-  plan_tratamiento_medicamentos_recetados TEXT NOT NULL,
-  plan_tratamiento_recomendaciones_dieteticas TEXT,
-  plan_tratamiento_indicaciones_cuidados_hogar TEXT,
-  plan_tratamiento_programa_seguimiento_citas_futuras TEXT
-);
-
-
-<?php
-// Configuración de la conexión a la base de datos
-$servername = "localhost";
-$username = "tu_usuario";
-$password = "tu_contraseña";
-$dbname = "nombre_base_datos";
-
-// Crear la conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verificar la conexión
-if ($conn->connect_error) {
-    die("Error en la conexión a la base de datos: " . $conn->connect_error);
-}
-
-// Obtener los datos enviados desde el formulario
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $propietario_nombre = $_POST["nombre"];
-    $propietario_direccion = $_POST["direccion"];
-    $propietario_telefono = $_POST["telefono"];
-    $propietario_email = $_POST["email"];
-    $animal_nombre = $_POST["nombreAnimal"];
-    $animal_especie = $_POST["especie"];
-    $animal_raza = $_POST["raza"];
-    $animal_edad = $_POST["edad"];
-    $animal_genero = $_POST["genero"];
-    $animal_color_caracteristicas = $_POST["color"];
-
-    // Insertar los datos en la base de datos
-    $sql = "INSERT INTO historia_clinica (
-                propietario_nombre,
-                propietario_direccion,
-                propietario_telefono,
-                propietario_email,
-                animal_nombre,
-                animal_especie,
-                animal_raza,
-                animal_edad,
-                animal_genero,
-                animal_color_caracteristicas
-            ) VALUES (
-                '$propietario_nombre',
-                '$propietario_direccion',
-                '$propietario_telefono',
-                '$propietario_email',
-                '$animal_nombre',
-                '$animal_especie',
-                '$animal_raza',
-                '$animal_edad',
-                '$animal_genero',
-                '$animal_color_caracteristicas'
-            )";
-
-    if ($conn->query($sql) === TRUE) {
-        echo "Datos guardados correctamente";
-    } else {
-        echo "Error al guardar los datos: " . $conn->error;
-    }
-}
-
-// Cerrar la conexión
-$conn->close();
-?>

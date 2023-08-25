@@ -1,4 +1,4 @@
-<<?php
+<?php
   include_once '../modelo/conexionfiltrar.php'
 
   ?> <!DOCTYPE html>
@@ -11,11 +11,13 @@
     <title>Formulario Ingreso </title>
     <link rel="shortcut icon" href="../img/logo.png">
 
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+	
+		<script src="https://kit.fontawesome.com/dcb1bbced2.js" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
+	
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 
   <body>
@@ -39,6 +41,10 @@
 
             <li class="nav-item">
       <a class="nav-link text-white" href="ingresoMascota.php">Registro mascota</a>  
+            </li>
+
+            <li class="nav-item">
+      <a class="nav-link text-white" href="historia_clinica.php">Historia Clinica</a>  
             </li>
 
             <li class="nav-item">
@@ -74,63 +80,67 @@
               <!------Modulo de Consulta------>
               <?php
               include_once("../modelo/conexionadd.php");
-              if(isset($_POST['btn_consultar']))
-              {
+              if (isset($_POST['btn_consultar'])) {
                 $ndocumento = $_POST['ConsultaDocumento'];
                 $existe = 0;
+              
+                if ($ndocumento == "") {
+                  echo "<script> Swal.fire('<h4> Señor usuario, por favor digite el número de documento para realizar la consulta</h4>')</script> ";
+                } else {
+                  $resultado = mysqli_query($conectar, "SELECT * FROM dueño_mascota 
+                  JOIN mascota_paciente ON dueño_mascota.id_dueño = mascota_paciente.fk_id_dueño
+                  WHERE dueño_mascota.numero_documento = '$ndocumento'");
 
-                if($ndocumento=="")
-                {
-                  echo "<script> Swal.fire('<h4> Señor usuario Digite el numero de documento para realizar la consulta</h4>')</script> ";
-                }
-
-                else{
-                  $resultado = mysqli_query($conectar, "SELECT * FROM dueño_mascota WHERE numero_documento = ' $ndocumento' ");
-
-                  while($consulta = mysqli_fetch_array($resultado))
-                  {
-                        echo "
-                        
-                        <center><table width=\"80%\border\"1\">
-                        <tr>
-                        <td><center><b> nombre </b></center></td>
-                        <td><center><b> apellido </b></center></td>
-                        <td><center><b> tipo_documento </b></center></td>
-                        <td><center><b> numero_documento </b></center></td>
-                        <td><center><b> edad </b></center></td>
-                        <td><center><b> telefono </b></center></td>
-                        <td><center><b> direccion </b></center></td>
-                        <td><center><b> correo </b></center></td>
-            
-                        </tr>
-                        <tr>
-                        <td><center>".$consulta['nombre']."</center></td>
-                        <td><center>".$consulta['apellido']."</center></td>
+                  // Mostrar los resultados de la consulta
+                  while ($consulta = mysqli_fetch_array($resultado)) {
+                    echo "
+                    <center>
+                    <table width='80%' border='1'>
+                      <tr>
+                        <td><center><b>Nombre dueño</b></center></td>
+                        <td><center><b>Apellido dueño</b></center></td>
+                        <td><center><b>Tipo de documento</b></center></td>
+                        <td><center><b>Número de documento</b></center></td>
+                        <td><center><b>Edad</b></center></td>
+                        <td><center><b>Teléfono</b></center></td>
+                        <td><center><b>Dirección</b></center></td>
+                        <td><center><b>Correo</b></center></td>
+                        <td><center><b>ID Mascota</b></center></td>
+                        <td><center><b>Nombre mascota</b></center></td>
+                        <td><center><b>Raza</b></center></td>
+                        <td><center><b>Tipo de mascota</b></center></td>
+                        <td><center><b>Sexo</b></center></td>
+                        <td><center><b>Edad mascota</b></center></td>
+                      </tr>
+                      <tr>
+                        <td><center>".$consulta['nombres']."</center></td>
+                        <td><center>".$consulta['apellidos']."</center></td>
                         <td><center>".$consulta['tipo_documento']."</center></td>
                         <td><center>".$consulta['numero_documento']."</center></td>
-                        <td><center>".$consulta['edad']."</center></td>
+                        <td><center>".$consulta['fecha_nacimiento']."</center></td>
                         <td><center>".$consulta['telefono']."</center></td>
                         <td><center>".$consulta['direccion']."</center></td>
                         <td><center>".$consulta['correo']."</center></td>
-                        </tr>
-                        </table>
-                        </center>";
-                        
-                        $existe++;
-
-                      }
-
-                        if($existe==0){
-
-                          echo "<script> Swal.fire('<h4> El número de documento ingresado no se encuentra registrado en nuestra base de datos</h4>')</script> ";
-
-
-                   }
-
+                        <td><center>".$consulta['id_mascota']."</center></td>
+                        <td><center>".$consulta['nombre_mascota']."</center></td>
+                        <td><center>".$consulta['raza']."</center></td>
+                        <td><center>".$consulta['tipo_mascota']."</center></td>
+                        <td><center>".$consulta['sexo']."</center></td>
+                        <td><center>".$consulta['fecha_nacimiento']."</center></td>
+                        <td><center>".$consulta['fk_id_dueño']."</center></td>
+                      </tr>
+                    </table>
+                    </center>";
+              
+                    $existe++;
+                  }
+              
+                  if ($existe == 0) {
+                    echo "<script> Swal.fire('<h4> El número de documento ingresado no se encuentra registrado en nuestra base de datos</h4>')</script> ";
+                  }
                 }
               }
-
-          ?>
+              ?>
          </form>
         </div>
     
@@ -138,7 +148,7 @@
   <br>
 
    <!-- Footer -->
-   <footer class="text-center text-lg-start bg-info text-muted">
+   <footer class="text-center text-lg-start text-muted" style="background-color: #D6EAF8 !important;">
     <!-- Section: Social media -->
     <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
       <!-- Left -->
@@ -263,3 +273,6 @@
 
   </html>
   </html>
+
+
+  
