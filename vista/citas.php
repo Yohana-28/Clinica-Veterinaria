@@ -138,26 +138,26 @@ try {
                     </div>
                     <div class='mb-3 col-6'>
                       <label class="form-label">Nombre del Dueño de la mascota</label>
-                      <input type="text" name="nombreD" class="form-control" value="<?php echo $nombreD; ?>">
+                      <input type="text" name="nombreD" class="form-control" readonly value="<?php echo $nombreD; ?>">
                     </div>
 
                     <div class='mb-3 col-6'>
                       <label class="form-label">Numero de Documento</label>
-                      <input type="number" name="Documento" class="form-control" value="<?php echo $ndocumento; ?>"> </div>
+                      <input type="number" name="Documento" class="form-control" readonly  value="<?php echo $ndocumento; ?>"> </div>
 
                     <div class='mb-3 col-6'>
                       <label>Telefono </label>
-                      <input type="number" name="Telefono"  class="form-control" value="<?php echo $tel; ?>">
+                      <input type="number" name="Telefono"  class="form-control" readonly  value="<?php echo $tel; ?>">
                     </div>
 
                     <div class='mb-3 col-6'>
                       <label>Direccion</label>
-                      <input type="varchar" name="Direccion"  class="form-control" value="<?php echo $direccion; ?>">
+                      <input type="varchar" name="Direccion"  class="form-control" readonly  value="<?php echo $direccion; ?>">
                     </div>
 
                     <div class='mb-3 col-6'>
                       <label>Email</label>
-                      <input type="email" name="email"  class="form-control" value="<?php echo $email; ?>">
+                      <input type="email" name="email"  class="form-control" readonly  value="<?php echo $email; ?>">
                     </div>
 
                 <div class='mb-3 col-4'>
