@@ -1,5 +1,9 @@
 <?php
   include_once '../modelo/conexion_historia.php'
+
+
+
+  
   ?> 
 <?php
 session_start();
@@ -77,15 +81,18 @@ $perfil = $_SESSION['perfil'];
     <br>
     <form>
       <div class="mb-3">
-        <h3>Datos del Propietario</h3>
-        <label for="nombre" class="form-label">Nombre:</label>
-        <input type="text" id="nombre" name="nombre"  class="form-control">
+      <h2>Datos de la cita</h2>
+        <label for="nombre" class="form-label">Nombre del dueño</label>
+        <input type="text" id="nombreDue" name="nombreDue"  class="form-control">
+
+        <label for="docu" class="form-label">Numero de documento:</label>
+        <input type="text" id="docu" name="docu" class="form-control">
+
+        <label for="tel" class="form-label">Teléfono:</label>
+        <input type="tel" id="tel" name="tel" class="form-control">
 
         <label for="direccion" class="form-label">Dirección:</label>
         <input type="text" id="direccion" name="direccion" class="form-control">
-
-        <label for="telefono" class="form-label">Teléfono:</label>
-        <input type="tel" id="telefono" name="telefono" class="form-control">
 
         <label for="email" class="form-label">Correo Electrónico:</label>
         <input type="email" id="email" name="email"  class="form-control">

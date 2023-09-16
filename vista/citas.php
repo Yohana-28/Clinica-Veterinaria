@@ -1,8 +1,61 @@
-<<?php
-  include_once '../modelo/conexionfiltrar.php'
+<?php
+include("../modelo/conexionadd.php");
 
-  ?> 
+$nombreM = "";
+$nombreD = "";
+$ndocumento = "";
+$tel = "";
+$direccion = "";
+$email = "";
+
+
+if (isset($_GET['id_mascota']) && isset($_GET['id_dueño'])) {
+    $idMascota = $_GET['id_mascota'];
+    $idDueño = $_GET['id_dueño'];
   
+
+      $consultaMascotaDueño = mysqli_query($conectar, "SELECT m.nombre_mascota, dm.nombres, dm.apellidos, 
+    dm.numero_documento, dm.telefono, dm.direccion, dm.correo FROM mascota_paciente AS m
+        JOIN dueño_mascota AS dm ON m.fk_id_dueño = dm.id_dueño
+        WHERE m.id_mascota = $idMascota AND dm.id_dueño = $idDueño");
+
+ if ($consultaMascotaDueño) {
+        $datos = mysqli_fetch_assoc($consultaMascotaDueño);
+        $nombreM = $datos['nombre_mascota'];
+        $nombreD = $datos['nombres'] . ' ' . $datos['apellidos'];
+        $ndocumento = $datos['numero_documento'];
+        $tel = $datos['telefono'];
+        $direccion = $datos['direccion'];
+        $email = $datos['correo'];
+        
+       
+    }
+}
+
+try {
+
+  if (isset($_POST['btn_guardar_Cita'])) {
+       
+      $fecha_hora_cita = $_POST['fecha_hora_cita'];
+      $motivo_cita = $_POST['motivo_cita'];
+      $fk_idMascota = $_POST['fk_idMascota'];
+
+       $queryCita = mysqli_query($conectar, "INSERT INTO citas (fecha_hora_cita, motivo_cita, fk_id_mascota) VALUES ('$fecha_hora_cita', '$motivo_cita', $fk_idMascota)");
+
+       
+      if ($queryCita) {
+        
+            echo "<script> Swal.fire('Datos registrados exitosamente')</script>";
+        } else {
+          
+            echo "<script> Swal.fire('Error al registrar los datos')</script>";
+        }
+    }
+} catch (Exception $e) {
+    echo "<script> Swal.fire('Error: " . $e->getMessage() . "')</script>";
+}
+?>
+
   <!DOCTYPE html>
   <html lang="en">
 
@@ -14,15 +67,17 @@
     <link rel="shortcut icon" href="../img/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-    <link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
+   
+   
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 	
 		<script src="https://kit.fontawesome.com/dcb1bbced2.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">
 	
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   </head>
 
   <body>
@@ -73,106 +128,71 @@
           <form action="" method="post">
             <div class="card position-relative mx-auto mb-4" style="width: 30rem;">
               <div class="card-header bg-Success  text-white">
-                Formulario de registro del Dueño de la mascota
+                Agendamiento de citas
               </div>
               <div class="container text-center">
                 <div class="row">
                     <div class='mb-3 col-6'>
-                      <label class="form-label" for="Nombre">Nombre del Dueño</label>
-                      <input type="text" name="Nombre" placeholder="Nombres" class="form-control">
+                      <label class="form-label">Nombre de la mascota</label>
+                      <input type="text" name="nombreM" class="form-control" readonly value="<?php echo $nombreM; ?> ">
                     </div>
                     <div class='mb-3 col-6'>
-                      <label class="form-label" for="Apellidos">Apellidos del Dueño</label>
-                      <input type="text" name="Apellidos" placeholder="Apellidos" class="form-control">
-                    </div>
-                    <div class='mb-3 col-6'>
-                      <label class="form-label" for="tipodoc">Tipo Documento</label>
-                      <select name="tipodoc" class="form-control">
-                        <option>---Seleccione---</option>
-                        <option>---Cedula de Ciudadania---</option>
-                        <option>---Cedula de Extranjeria---</option>
-                      </select>
-                    </div>
-                    <div class='mb-3 col-6'>
-                      <label class="form-label" for="Documento">Numero de Documento</label>
-                      <input type="number" name="Documento" placeholder="Numero Documento" class="form-control">
+                      <label class="form-label">Nombre del Dueño de la mascota</label>
+                      <input type="text" name="nombreD" class="form-control" value="<?php echo $nombreD; ?>">
                     </div>
 
-        
                     <div class='mb-3 col-6'>
-                      <label>Fecha de Nacimiento</label>
-                      <input type="date" name="Edad" placeholder="Fecha del dueño" class="form-control">
-                    </div>
+                      <label class="form-label">Numero de Documento</label>
+                      <input type="number" name="Documento" class="form-control" value="<?php echo $ndocumento; ?>"> </div>
+
                     <div class='mb-3 col-6'>
                       <label>Telefono </label>
-                      <input type="number" name="Telefono" placeholder="Telefono" class="form-control">
+                      <input type="number" name="Telefono"  class="form-control" value="<?php echo $tel; ?>">
                     </div>
+
                     <div class='mb-3 col-6'>
                       <label>Direccion</label>
-                      <input type="varchar" name="Direccion" placeholder="Direccion" class="form-control">
+                      <input type="varchar" name="Direccion"  class="form-control" value="<?php echo $direccion; ?>">
                     </div>
+
                     <div class='mb-3 col-6'>
                       <label>Email</label>
-                      <input type="email" name="email" placeholder="Email " class="form-control">
+                      <input type="email" name="email"  class="form-control" value="<?php echo $email; ?>">
                     </div>
 
-                      <br>
-                  
+                <div class='mb-3 col-4'>
+                    <label>Fecha y Hora de la Cita:</label>
+                   <input type="datetime-local" name="fecha_hora_cita" class="form-control">
+                    </div>
+
+                    <div class='mb-3 col-6'>
+                    <label for="motivo_cita">Motivo de la Cita:</label>
+                      <select name="motivo_cita" class="form-control">
+                        <option>---Seleccione---</option>
+                        <option>---Cita de control---</option>
+                        <option>---Vacunación y/o Examenes---</option>
+                        <option>---Esterilización---</option>
+                      </select>
+                    </div>
+
+
+         
+                    
                   <div>
-                    <input type="submit" name="btn_guardar" class="btn btn-dark" value="Guardar">
-                  </div>
-                </div><br>
-              </div>
+ <input type="hidden" name="fk_idMascota" value="<?php echo $idMascota; ?>">
+<input type="hidden" name="fk_idDueño" value="<?php echo $idDueño; ?>">
+                  <input type="submit"  name="btn_guardar_Cita" class="btn btn-success" value="Agendar Cita"> 
             </div>
-            <?php
-            include("../modelo/conexionadd.php");
-
-
-            try {
-
-              var_dump($_POST);  if (isset($_POST['btn_guardar'])) {
-                $nombredu = $_POST['Nombre'];
-                $apellido = $_POST['Apellidos'];
-                $tipodoc = $_POST['tipodoc'];
-                $ndocumento = $_POST['Documento'];
-                $edad = $_POST['Edad'];
-                $tel = $_POST['Telefono'];
-                $direccion = $_POST['Direccion'];
-                $email = $_POST['email'];
-
-
-
-                if (
-                  $nombredu == "" ||  $apellido == "" ||  $tipodoc == "" || $ndocumento == "" ||
-                  $edad == "" || $tel == "" || $direccion == "" ||  $email == ""
-                ) {
-
-                  echo "<script> Swal.fire('Todos los campos son obligatorios')</script> ";
-                } else {
-                  $query = mysqli_query($conectar, "INSERT INTO dueño_mascota( nombres, apellidos, tipo_documento,numero_documento, fecha_nacimiento, telefono, direccion, correo) values ('$nombredu','$apellido','$tipodoc', '$ndocumento', '$edad','$tel', '$direccion','$email' )"); {
-                    echo "<script> Swal.fire('Datos registrados exitosamente')</script> ";
-                  }
-                }
-              }
-            } catch (Exception $e) {
-          
-              if ($e->getCode() == 1062 ) 
-              { echo "<script> Swal.fire('El usuario ya existe') </script>";}
-
-              else  
-              { echo "<script> Swal.fire(".$e->getMessage().") </script>";}
-                
-            }
-          
-
-
-            ?>
-          </form>
+         </form>
         </div>
       </div>
     </div>
+    </div>
+    </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
- 
+ <br>
   <!-- Footer -->
  
 <footer class="text-center text-lg-start text-muted" style="background-color: #D6EAF8 !important;">
@@ -301,5 +321,3 @@
 
   </html>
 
-
-  

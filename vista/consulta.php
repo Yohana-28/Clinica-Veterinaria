@@ -1,4 +1,4 @@
-<?php
+ <?php
   include_once '../modelo/conexionfiltrar.php'
 
   ?> <!DOCTYPE html>
@@ -10,13 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario Ingreso </title>
     <link rel="shortcut icon" href="../img/logo.png">
-
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-	
 		<script src="https://kit.fontawesome.com/dcb1bbced2.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://kit.fontawesome.com/dcb1bbced2.css" crossorigin="anonymous">
-	
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
 
@@ -42,6 +39,7 @@
             <li class="nav-item">
       <a class="nav-link text-white" href="ingresoMascota.php">Registro mascota</a>  
             </li>
+
 
             <li class="nav-item">
       <a class="nav-link text-white" href="historia_clinica.php">Historia Clinica</a>  
@@ -76,7 +74,8 @@
               </table>
               <td colspan="2"></td>
               <br>
-              </center>
+            </form>
+            
               <!------Modulo de Consulta------>
               <?php
               include_once("../modelo/conexionadd.php");
@@ -90,6 +89,59 @@
                   $resultado = mysqli_query($conectar, "SELECT * FROM dueño_mascota 
                   JOIN mascota_paciente ON dueño_mascota.id_dueño = mascota_paciente.fk_id_dueño
                   WHERE dueño_mascota.numero_documento = '$ndocumento'");
+
+echo "
+<center>
+<table id='resultTable' class='display' style='width:100%'>
+  <thead>
+    <tr>
+      <th>Nombre dueño</th>
+      <th>Apellido dueño</th>
+      <th>Tipo de documento</th>
+      <th>Número de documento</th>
+      <th>Edad</th>
+      <th>Teléfono</th>
+      <th>Dirección</th>
+      <th>Correo</th>
+      <th>ID Mascota</th>
+      <th>Nombre mascota</th>
+      <th>Raza</th>
+      <th>Tipo de mascota</th>
+      <th>Sexo</th>
+      <th>Edad mascota</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>";
+  
+while ($consulta = mysqli_fetch_array($resultado)) {
+  echo "<tr>
+          <td>" . $consulta['nombres'] . "</td>
+          <td>" . $consulta['apellidos'] . "</td>
+          <td>" . $consulta['tipo_documento'] . "</td>
+          <td>" . $consulta['numero_documento'] . "</td>
+          <td>" . $consulta['fecha_nacimiento'] . "</td>
+          <td>" . $consulta['telefono'] . "</td>
+          <td>" . $consulta['direccion'] . "</td>
+          <td>" . $consulta['correo'] . "</td>
+          <td>" . $consulta['id_mascota'] . "</td>
+          <td>" . $consulta['nombre_mascota'] . "</td>
+          <td>" . $consulta['raza'] . "</td>
+          <td>" . $consulta['tipo_mascota'] . "</td>
+          <td>" . $consulta['sexo'] . "</td>
+          <td>" . $consulta['fecha_nacimiento'] . "</td>
+          <td>
+          <a href='citas.php?id_mascota=" . $consulta['id_mascota'] . "&id_dueño=" . $consulta['id_dueño'] . "' class='btn btn-success'>Agendar Cita</a>
+        <a href='editar_info.php?id=" . $consulta['id_mascota'] . "' class='btn btn-warning'>Editar</a>
+          </td>
+        </tr>";
+  $existe++;
+}
+
+echo "</tbody>
+</table>
+</center>";
+
 
                   // Mostrar los resultados de la consulta
                   while ($consulta = mysqli_fetch_array($resultado)) {
@@ -143,7 +195,12 @@
               ?>
          </form>
         </div>
-    
+        <script>
+  $(document).ready(function () {
+    $('#resultTable').DataTable();
+  });
+</script>
+
   </body>
   <br>
 
@@ -273,6 +330,3 @@
 
   </html>
   </html>
-
-
-  

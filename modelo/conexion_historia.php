@@ -15,18 +15,10 @@ if ($conn->connect_error) {
 
 // Obtener los datos enviados desde el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $propietario_nombre = $_POST["nombre"];
-    $propietario_direccion = $_POST["direccion"];
-    $propietario_telefono = $_POST["telefono"];
-    $propietario_email = $_POST["email"];
-    $animal_nombre = $_POST["nombreAnimal"];
-    $animal_especie = $_POST["especie"];
-    $animal_raza = $_POST["raza"];
-    $animal_edad = $_POST["edad"];
-    $animal_genero = $_POST["genero"];
-    $animal_color_caracteristicas = $_POST["color"];
+
+
     $historia_medica_vacunas = $_POST["vacunas"];
-    $historia_medica_enfermedades = $_POST["enfermedades"];
+    $historia_medica_enfermedades = $_POST["enfermedades"];1|       
     $historia_medica_cirugias = $_POST["cirugias"];
     $historia_medica_alergias = $_POST["alergias"];
     $historia_medica_medicamentos = $_POST["medicamentos"];
@@ -56,19 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $plan_tratamiento_recomendaciones_dieteticas= $_POST["recomendaciones"];
     $plan_tratamiento_indicaciones_cuidados_hogar= $_POST["cuidados"];
     $plan_tratamiento_programa_seguimiento_citas_futuras= $_POST["seguimiento"];
+    $fk_id_mascota= $_POST["fk_id"];
+    $fk_id_cita= $_POST["fk_id_cita"];
 
 
     // Insertar los datos en la base de datos
     $sql = "INSERT INTO historia_clinica (
-                propietario_nombre,
-                propietario_direccion,
-                propietario_telefono,
-                propietario_email,
-                animal_nombre,
-                animal_especie,
-                animal_raza,
-                animal_edad,
-                animal_genero,
                 animal_color_caracteristicas,
                 historia_medica_vacunas,
                 historia_medica_enfermedades,
@@ -100,18 +85,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 plan_tratamiento_medicamentos_recetados,
                 plan_tratamiento_recomendaciones_dieteticas,
                 plan_tratamiento_indicaciones_cuidados_hogar,
-                plan_tratamiento_programa_seguimiento_citas_futuras	
+                plan_tratamiento_programa_seguimiento_citas_futuras,
+                fk_id_mascota,
+                fk_id_cita
 
             ) VALUES (
-                '$propietario_nombre',
-                '$propietario_direccion',
-                '$propietario_telefono',
-                '$propietario_email',
-                '$animal_nombre',
-                '$animal_especie',
-                '$animal_raza',
-                '$animal_edad',
-                '$animal_genero',
                 '$animal_color_caracteristicas',
                 '$historia_medica_vacunas',
                 '$historia_medica_enfermedades',
@@ -143,7 +121,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 '$plan_tratamiento_medicamentos_recetados',
                 '$plan_tratamiento_recomendaciones_dieteticas',
                 '$plan_tratamiento_indicaciones_cuidados_hogar',
-                '$plan_tratamiento_programa_seguimiento_citas_futuras'
+                '$plan_tratamiento_programa_seguimiento_citas_futuras',
+                '$fk_id_mascota',
+                $fk_id_cita
         
             )";
 
